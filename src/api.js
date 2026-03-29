@@ -3,7 +3,7 @@
 // (e.g getProducts, getProduct, createProduct, etc.)
 
 export async function fetchProducts() {
-  const candidates = ['/products', 'http://localhost:5088/products'];
+  const candidates = ['/api/products', 'http://localhost:5088/api/products'];
   for (const url of candidates) {
     try {
       const res = await fetch(url);
