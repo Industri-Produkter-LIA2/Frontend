@@ -9,7 +9,8 @@ export async function fetchProducts() {
       const res = await fetch(url);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       return await res.json();
-    } catch {
+    } catch (err) {
+      console.warn('Failed to fetch products from:', url, err);
     }
   }
   return null;
@@ -32,7 +33,11 @@ export function escapeHtml(s) {
 
 export async function loadAndRenderProducts(containerId = 'products') {
   const container = document.getElementById(containerId);
-  if (!container) return;
+  if (!container) {
+    console.warn('Products container not found');
+    return;
+  }
+  container.innerHTML = '<p>Loading...</p>';
   const products = await fetchProducts();
   if (!products) {
     container.innerHTML = '<p class="error">Unable to load products. Is the API running?</p>';
