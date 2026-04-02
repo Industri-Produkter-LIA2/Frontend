@@ -45,6 +45,10 @@ h1 { color: #333; margin: 0; text-align: center; }
   color: #444;
 }
 
+.header-wrapper {
+  position: relative;
+}
+
 .site-header {
   display: flex;
   align-items: center;
