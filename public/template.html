@@ -27,55 +27,57 @@
   </main>
 
   <script>
+  document.addEventListener('DOMContentLoaded', () => {  
     // This script handles the nav bar, we might need to change it as I am not quite happy with it right now, currently opening the menu also moves the brand name down.
-  (function () {
-    const MENU_ITEMS = [
-      { title: 'Home', href: '/' }, // We don't have a homepage, and "/" does just also redirect to /products, but I'm keeping this in case we decide to add a homepage at some point.
-      { title: 'Products', href: '/products' },
-    ];
-    const LOGIN_URL = '/login';
+    (function () {
+      const MENU_ITEMS = [
+        { title: 'Home', href: '/' }, // We don't have a homepage, and "/" does just also redirect to /products, but I'm keeping this in case we decide to add a homepage at some point.
+        { title: 'Products', href: '/products' },
+      ];
+      const LOGIN_URL = '/login';
 
-    const navList = document.getElementById('nav-list');
-    const navEl = document.getElementById('page-nav');
-    const toggle = document.getElementById('nav-toggle');
-    const loginBtn = document.getElementById('login-btn');
+      const navList = document.getElementById('nav-list');
+      const navEl = document.getElementById('page-nav');
+      const toggle = document.getElementById('nav-toggle');
+      const loginBtn = document.getElementById('login-btn');
 
-    MENU_ITEMS.filter(i => i.href).forEach(item => {
-      const li = document.createElement('li');
-      const a = document.createElement('a');
-      a.href = item.href;
-      a.textContent = item.title;
-      a.setAttribute('role', 'menuitem');
-      li.appendChild(a);
-      navList.appendChild(li);
-    });
+      MENU_ITEMS.filter(i => i.href).forEach(item => {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = item.href;
+        a.textContent = item.title;
+        a.setAttribute('role', 'menuitem');
+        li.appendChild(a);
+        navList.appendChild(li);
+      });
 
-    loginBtn.addEventListener('click', () => {
-      window.location.href = LOGIN_URL;
-    });
+      loginBtn.addEventListener('click', () => {
+        window.location.href = LOGIN_URL;
+      });
 
-    function closeNav() {
-      navEl.hidden = true;
-      toggle.setAttribute('aria-expanded', 'false');
-    }
-    function openNav() {
-      navEl.hidden = false;
-      toggle.setAttribute('aria-expanded', 'true');
-    }
+      function closeNav() {
+        navEl.hidden = true;
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+      function openNav() {
+        navEl.hidden = false;
+        toggle.setAttribute('aria-expanded', 'true');
+      }
 
-    toggle.addEventListener('click', (e) => {
-      const isOpen = toggle.getAttribute('aria-expanded') === 'true';
-      (isOpen ? closeNav() : openNav());
-      e.stopPropagation();
-    });
+      toggle.addEventListener('click', (e) => {
+        const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+        (isOpen ? closeNav() : openNav());
+        e.stopPropagation();
+      });
 
-    document.addEventListener('click', (e) => {
-      if (!navEl.contains(e.target) && e.target !== toggle) closeNav();
-    });
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeNav();
-    });
-  })();
+      document.addEventListener('click', (e) => {
+        if (!navEl.contains(e.target) && e.target !== toggle) closeNav();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeNav();
+      });
+    })();
+  });
   </script>
 </body>
 </html>
