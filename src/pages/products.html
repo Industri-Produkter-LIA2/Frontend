@@ -12,30 +12,13 @@
     <div id="products"></div>
   </template>
 
-  <!-- Added template loading script so that we can simply add a header/footer to the template, or other essential every-page aspects, so we don't need to code those into every new .html we make. -->
-  <script>
-    (async () => {
-      const templatePath = "../../public/template.html";
-      try {
-        const tplText = await fetch(templatePath).then(r => { if (!r.ok) throw r; return r.text(); });
-        const parser = new DOMParser();
-        const tplDoc = parser.parseFromString(tplText, 'text/html');
-        const main = tplDoc.getElementById('app');
-        if (!main) throw new Error('Template missing <main id="app">');
+  <!-- Moved template loading to separate file; templateLoader.js -->
+  <script type="module">
+    import { loadTemplate } from '/src/templateLoader.js';
+    import { initApp } from '/app.js';
 
-        main.innerHTML = document.getElementById('page-fragment').innerHTML;
-
-        const frag = document.getElementById('page-fragment');
-        const fragmentTitle = frag && frag.dataset && frag.dataset.title;
-        tplDoc.title = fragmentTitle || document.title || tplDoc.title;
-
-        document.open();
-        document.write(tplDoc.documentElement.outerHTML);
-        document.close();
-      } catch (err) {
-        document.body.innerHTML = '<pre style="color: crimson">Error loading template: ' + String(err) + '</pre>';
-      }
-    })();
+    await loadTemplate();
+    initApp();
   </script>
 </body>
 </html>
