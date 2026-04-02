@@ -24,6 +24,6 @@ export async function loadTemplate() {
   main.innerHTML = fragmentHTML;
 
   if (fragmentTitle) {
-    document.title = fragmentTitle;
+    document.title = fragmentTitle || document.title || 'IP Produkter';
   }
 }

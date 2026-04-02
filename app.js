@@ -2,5 +2,8 @@ import { loadAndRenderProducts } from './src/api.js';
 
 export function initApp() {
   console.log('Frontend Loaded');
-  loadAndRenderProducts();
+  
+  if (document.getElementById('products')) {
+    loadAndRenderProducts();
+  }
 }
