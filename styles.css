@@ -45,6 +45,15 @@ h1 { color: #333; margin: 0; text-align: center; }
   color: #444;
 }
 
+.product-image {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  margin: 1rem auto 0;
+}
+
 .header-wrapper {
   position: relative;
 }
