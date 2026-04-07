@@ -44,3 +44,17 @@ h1 { color: #333; margin: 0; text-align: center; }
   margin-top: 8px;
   color: #444;
 }
+
+.header-wrapper {
+  position: relative;
+}
+
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.site-brand { font-weight: 600; }
+.header-actions { display:flex; gap:0.5rem; align-items:center; }
+
+main#app { padding: 1rem; margin-top: 0.5rem; }
