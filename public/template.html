@@ -7,10 +7,23 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <header class="site-header" role="banner">
+    <a class="site-brand" href="/">IP Produkter</a>
+
+    <div class="header-wrapper">
+      <div class="header-actions" role="navigation" aria-label="Top Actions">
+        <button id="login-btn" type="button" aria-label="Login">Login</button>
+        <button id="nav-toggle" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="page-nav">Menu</button>
+    </div>
+
+      <nav id="page-nav" class="page-nav" role="menu" hidden>
+        <ul id="nav-list"></ul>
+      </nav>
+    </div>
+  </header>
+
   <main id="app">
-    <h1>Heading Template</h1>
-    <div id="products"></div>
+    <!-- PAGE_CONTENT -->
   </main>
-  <script type="module" src="app.js"></script>
 </body>
 </html>
