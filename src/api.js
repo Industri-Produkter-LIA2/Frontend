@@ -33,6 +33,7 @@ export function escapeHtml(s) {
 
 export async function loadAndRenderProducts(containerId = 'products') {
   const container = document.getElementById(containerId);
+  const searchInput = document.getElementById('product-search');
   if (!container) {
     console.warn('Products container not found');
     return;
@@ -44,6 +45,17 @@ export async function loadAndRenderProducts(containerId = 'products') {
     return;
   }
   renderProducts(container, products);
+
+  if (searchInput) {
+    searchInput.addEventListener('input', () => {
+      const term = searchInput.value.trim().toLowerCase();
+      const filteredProducts = products.filter(p => {
+        const name = String(p.name ?? p.Name ?? '').toLowerCase();
+        return name.includes(term);
+      });
+      renderProducts(container, filteredProducts);
+    });
+  }
 }
 
 function renderProducts(container, products) {
