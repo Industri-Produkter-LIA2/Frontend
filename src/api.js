@@ -1,19 +1,5 @@
 ﻿// ==================== CONFIGURATION ====================
-const API_BASE = "https://localhost:7040/";
-
-export async function fetchProducts() {
-  const candidates = ['/api/products', 'http://localhost:5088/api/products'];
-  for (const url of candidates) {
-    try {
-      const res = await fetch(url);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      return await res.json();
-    } catch (err) {
-      console.warn('Failed to fetch products from:', url, err);
-    }
-  }
-  return null;
-}
+const API_BASE = "https://localhost:7040";
 
 export function formatPrice(value) {
     const num = Number(value);
@@ -60,44 +46,48 @@ function showMessage(message, type = "info") {
 
 // ==================== PRODUCT FUNCTIONS ====================
 export async function fetchProducts() {
-    const candidates = ['/api/products', 'http://localhost:5088/api/products'];
-    for (const url of candidates) {
-        try {
-            const res = await fetch(url);
-            if (!res.ok) throw new Error(`HTTP ${res.status}`);
-            return await res.json();
-        } catch {
-            // Continue to next candidate
-        }
+    // Force the absolute URL instead of the relative candidate loop
+    const url = `${API_BASE}/api/products`;
+    
+    try {
+        const res = await fetch(url);
+        console.log("Fetching from:", url, "Status:", res.status);
+        
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return await res.json();
+    } catch (error) {
+        console.error("API Error:", error);
+        return null;
     }
-    return null;
 }
 
 export async function loadAndRenderProducts(containerId = 'products') {
-  const container = document.getElementById(containerId);
-  const searchInput = document.getElementById('product-search');
-  if (!container) {
-    console.warn('Products container not found');
-    return;
-  }
-  container.innerHTML = '<p>Loading...</p>';
-  const products = await fetchProducts();
-  if (!products) {
-    container.innerHTML = '<p class="error">Unable to load products. Is the API running?</p>';
-    return;
-  }
-  renderProducts(container, products);
+    const container = document.getElementById(containerId);
+    const searchInput = document.getElementById('product-search');
+    if (!container) {
+        console.warn('Products container not found');
+        return;
+    }
+    container.innerHTML = '<p>Loading...</p>';
+    const data = await fetchProducts();
 
-  if (searchInput) {
-    searchInput.addEventListener('input', () => {
-      const term = searchInput.value.trim().toLowerCase();
-      const filteredProducts = products.filter(p => {
-        const name = String(p.name ?? p.Name ?? '').toLowerCase();
-        return name.includes(term);
-      });
-      renderProducts(container, filteredProducts);
-    });
-  }
+    const products = Array.isArray(data) ? data : (data.products || data.items || data.$values || []);
+    if (products.length === 0) {
+        container.innerHTML = '<p class="error">Unable to load products. Is the API running?</p>';
+        return;
+    }
+    renderProducts(container, products);
+
+    if (searchInput) {
+        searchInput.addEventListener('input', () => {
+            const term = searchInput.value.trim().toLowerCase();
+            const filteredProducts = products.filter(p => {
+                const name = String(p.name ?? p.Name ?? '').toLowerCase();
+                return name.includes(term);
+            });
+            renderProducts(container, filteredProducts);
+        });
+    }
 }
 
 function renderProducts(container, products) {
@@ -124,10 +114,35 @@ function createProductCard(product, productId) {
     const card = document.createElement('article');
     card.className = 'product';
 
+    // Add image
+    const placeholderImg = '/public/placeholder.png';
+    const imageUrl = product.imageUrl ?? product.ImageUrl;
+    // Create a link wrapper for details
+    const detailLink = `product-details.html?id=${productId}`;
+    const img = document.createElement('img');
+    img.onerror = () => {
+        img.onerror = null; // Prevents looping in case the placeholder also fails to load
+        img.src = placeholderImg;
+    };
+    img.src = imageUrl || placeholderImg;
+    img.alt = product.name ?? product.Name ?? 'Product image';
+    img.className = 'product-image';
+    img.onclick = () => window.location.href = detailLink;
+    img.style.cursor = 'pointer';
+    card.appendChild(img)
+
+    // Add title
     const title = document.createElement('h2');
-    title.textContent = product.name ?? product.Name ?? 'Unnamed product';
+    const titleLink = document.createElement('a');
+    titleLink.href = detailLink;
+    titleLink.textContent = product.name ?? product.Name ?? 'Unnamed product';
+    titleLink.style.textDecoration = 'none';
+    titleLink.style.color = 'green';       
+    
+    title.appendChild(titleLink);
     card.appendChild(title);
 
+    // Add meta information
     const meta = document.createElement('div');
     meta.className = 'meta';
     meta.innerHTML = `
@@ -137,6 +152,7 @@ function createProductCard(product, productId) {
     `;
     card.appendChild(meta);
 
+    // Add description
     const descText = product.description ?? product.Description;
     if (descText) {
         const desc = document.createElement('p');
@@ -145,6 +161,7 @@ function createProductCard(product, productId) {
         card.appendChild(desc);
     }
 
+    // Add "Add to Cart" button
     const buttonContainer = createAddToCartButton(productId);
     card.appendChild(buttonContainer);
 
@@ -182,19 +199,130 @@ function createAddToCartButton(productId) {
     return container;
 }
 
-    const placeholderImg = '/public/placeholder.png';
+//=================Product Details ==========================
+// Add these to src/api.js
 
-    const imageUrl = p.imageUrl ?? p.ImageUrl;
-    const img = document.createElement('img');
-    img.onerror = () => {
-      img.onerror = null; // Prevents looping in case the placeholder also fails to load.
-      img.src = placeholderImg;
+export async function fetchProductById(id) {
+    const url = `${API_BASE}/api/products/${id}`;
+    try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`Product not found (HTTP ${res.status})`);
+        return await res.json();
+    } catch (error) {
+        console.error("API Error:", error);
+        return null;
+    }
+}
+const DEFAULT_IMAGE = '/public/placeholder.png';
+export async function loadAndRenderProductDetails() {
+    const container = document.getElementById('product-details-container');
+    if (!container) return;
+
+    // Get ID from URL (e.g., product-details.html?id=5)
+    const params = new URLSearchParams(window.location.search);
+    const productId = params.get('id');
+
+    if (!productId) {
+        container.innerHTML = '<p class="error">No product ID provided.</p>';
+        return;
+    }
+
+    const product = await fetchProductById(productId);
+
+    if (!product) {
+        container.innerHTML = '<p class="error">Product could not be loaded.</p>';
+        return;
+    }
+
+const initialSrc = (product.imageUrl && product.imageUrl.trim() !== '') 
+                       ? product.imageUrl 
+                       : DEFAULT_IMAGE;
+
+    // Render the details
+container.innerHTML = `
+    <div class="details-layout">
+        <div class="details-image">
+            <img id="main-product-img" 
+                 src="${initialSrc}" 
+                 alt="${escapeHtml(product.name)}" width="20%">
+        </div>
+        <div class="details-info">
+            <h1>${escapeHtml(product.name)}</h1>
+            <p class="article-num">Art nr: ${escapeHtml(product.articleNumber)}</p>
+            <p class="category">Category: ${escapeHtml(product.category)}</p>
+            <p class="price">${formatPrice(product.price)}</p>
+            
+            <div class="description">
+                <h3>Beskrivning</h3>
+                <p>${escapeHtml(product.description || 'Ingen beskrivning tillgänglig.')}</p>
+            </div>
+
+            <div class="actions-row" style="display: flex; gap: 1rem; margin-top: 2rem;">
+                <div id="details-action-container"></div>
+                <a href="products.html" class="back-btn">Tillbaka till produkter</a>
+            </div>
+        </div>
+    </div>
+`;
+
+// Handle broken links: If the URL exists but the image fails to load
+    const imgElement = document.getElementById('main-product-img');
+    imgElement.onerror = () => {
+        imgElement.src = DEFAULT_IMAGE;
+        imgElement.onerror = null; // Prevent infinite loops
     };
-    img.src = imageUrl || placeholderImg; // Sets the image found in /public/ as the placeholder if no image is found for the product. Also realizing now that we probably need to split /public/ into /public/images/ and /public/pages/ in the future.
-    img.alt = p.name ?? p.Name ?? 'Product image';
-    img.className = 'product-image';
-    card.appendChild(img);
 
-    container.appendChild(card);
-  });
+    const actionContainer = document.getElementById('details-action-container');
+    actionContainer.appendChild(createAddToCartButton(product.id));}
+
+// ==================== CART FUNCTIONS ====================
+async function handleAddToCart(productId, button) {
+    try {
+        button.disabled = true;
+        button.textContent = 'Adding...';
+        
+        let cartId = localStorage.getItem('cartId');
+        
+        // Create cart if doesn't exist
+        if (!cartId) {
+            const cartResponse = await fetch(`${API_BASE}api/cart`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            
+            if (!cartResponse.ok) throw new Error('Failed to create cart');
+            
+            const cart = await cartResponse.json();
+            cartId = cart.id;
+            localStorage.setItem('cartId', cartId);
+        }
+        
+        // Add item to cart
+        const response = await fetch(`${API_BASE}api/cart/${cartId}/items`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ productId, quantity: 1 })
+        });
+        
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message || 'Failed to add item to cart');
+        }
+        
+        showMessage('Product added to cart!', 'success');
+        button.textContent = 'Added! ✓';
+        button.style.backgroundColor = '#45a049';
+        
+        setTimeout(() => {
+            button.textContent = 'Add to Cart 🛒';
+            button.style.backgroundColor = '#4CAF50';
+            button.disabled = false;
+        }, 2000);
+        
+    } catch (error) {
+        console.error('Error adding to cart:', error);
+        showMessage(error.message || 'Failed to add product to cart', 'error');
+        button.textContent = 'Add to Cart 🛒';
+        button.disabled = false;
+    }
 }
