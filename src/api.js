@@ -79,6 +79,19 @@ function renderProducts(container, products) {
       card.appendChild(desc);
     }
 
+    const placeholderImg = '/public/placeholder.png';
+
+    const imageUrl = p.imageUrl ?? p.ImageUrl;
+    const img = document.createElement('img');
+    img.onerror = () => {
+      img.onerror = null; // Prevents looping in case the placeholder also fails to load.
+      img.src = placeholderImg;
+    };
+    img.src = imageUrl || placeholderImg; // Sets the image found in /public/ as the placeholder if no image is found for the product. Also realizing now that we probably need to split /public/ into /public/images/ and /public/pages/ in the future.
+    img.alt = p.name ?? p.Name ?? 'Product image';
+    img.className = 'product-image';
+    card.appendChild(img);
+
     container.appendChild(card);
   });
 }
