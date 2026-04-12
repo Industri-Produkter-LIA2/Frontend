@@ -118,7 +118,7 @@ function createProductCard(product, productId) {
     const placeholderImg = '/public/placeholder.png';
     const imageUrl = product.imageUrl ?? product.ImageUrl;
     // Create a link wrapper for details
-    const detailLink = `product-details?id=${productId}`;
+    const detailLink = `product-details/${productId}`;
     const img = document.createElement('img');
     img.onerror = () => {
         img.onerror = null; // Prevents looping in case the placeholder also fails to load
@@ -218,11 +218,13 @@ export async function loadAndRenderProductDetails() {
     const container = document.getElementById('product-details-container');
     if (!container) return;
 
+    const pathParts = window.location.pathname.split('/').filter(part => part !== '');
+    const productId = pathParts[pathParts.length - 1];
+
     // Get ID from URL (e.g., product-details.html?id=5)
     const params = new URLSearchParams(window.location.search);
-    const productId = params.get('id');
 
-    if (!productId) {
+     if (!productId || productId === 'product-details') {
         container.innerHTML = '<p class="error">No product ID provided.</p>';
         return;
     }
@@ -259,7 +261,7 @@ container.innerHTML = `
 
             <div class="actions-row" style="display: flex; gap: 1rem; margin-top: 2rem;">
                 <div id="details-action-container"></div>
-                <a href="products" class="back-btn">Tillbaka till produkter</a>
+                <a href="../products" class="back-btn">Tillbaka till produkter</a>
             </div>
         </div>
     </div>
