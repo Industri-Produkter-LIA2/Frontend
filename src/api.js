@@ -84,14 +84,14 @@ export async function loadAndRenderProducts(containerId = 'products') {
   renderProducts(container, products);
 
     if (searchInput) {
-        searchInput.addEventListener('input', () => {
+        searchInput.oninput = () => {
             const term = searchInput.value.trim().toLowerCase();
             const filteredProducts = products.filter(p => {
                 const name = String(p.name ?? p.Name ?? '').toLowerCase();
                 return name.includes(term);
             });
             renderProducts(container, filteredProducts);
-        });
+        };
     }
 }
 
