@@ -64,17 +64,24 @@ export async function fetchProducts() {
 export async function loadAndRenderProducts(containerId = 'products') {
   const container = document.getElementById(containerId);
   const searchInput = document.getElementById('product-search');
+
   if (!container) {
     console.warn('Products container not found');
     return;
   }
+
   container.innerHTML = '<p>Loading...</p>';
-  const products = await fetchProducts();
-  if (!products) {
+
+  const data = await fetchProducts();
+
+  if (!data || !Array.isArray(data.items)) {
     container.innerHTML = '<p class="error">Unable to load products. Is the API running?</p>';
     return;
   }
-  renderProducts(container, products.items);
+
+  const products = data.items;
+
+  renderProducts(container, products);
 
     if (searchInput) {
         searchInput.addEventListener('input', () => {
@@ -249,12 +256,12 @@ const initialSrc = (product.imageUrl && product.imageUrl.trim() !== '')
                 <p class="article-num">Art nr: ${escapeHtml(product.articleNumber)}</p>
                 <p class="category">Category: ${escapeHtml(product.category)}</p>
                 <p class="price">${formatPrice(product.price)}</p>
-                
+
                 <div class="description">
                     <h3>Beskrivning</h3>
                     <p>${escapeHtml(product.description || 'Ingen beskrivning tillgänglig.')}</p>
                 </div>
-      
+
                 <div class="actions-row" style="display: flex; gap: 1rem; margin-top: 2rem;">
                     <div id="details-action-container"></div>
                     <a href="products" class="back-btn">Tillbaka till produkter</a>
