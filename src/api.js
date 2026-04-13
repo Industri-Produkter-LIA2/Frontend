@@ -3,7 +3,7 @@
 // (e.g getProducts, getProduct, createProduct, etc.)
 
 export async function fetchProducts() {
-  const candidates = ['/api/products', 'http://localhost:5088/api/products'];
+  const candidates = ['/api/products'];
   for (const url of candidates) {
     try {
       const res = await fetch(url);
@@ -44,7 +44,7 @@ export async function loadAndRenderProducts(containerId = 'products') {
     container.innerHTML = '<p class="error">Unable to load products. Is the API running?</p>';
     return;
   }
-  renderProducts(container, products);
+  renderProducts(container, products.items);
 
   if (searchInput) {
     searchInput.addEventListener('input', () => {
