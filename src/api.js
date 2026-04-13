@@ -116,7 +116,7 @@ function createProductCard(product, productId) {
     const placeholderImg = '/public/placeholder.png';
     const imageUrl = product.imageUrl ?? product.ImageUrl;
     // Create a link wrapper for details
-    const detailLink = `product-details/${productId}`;
+    const detailLink = `product-details?id=${productId}`;
     const img = document.createElement('img');
     img.onerror = () => {
         img.onerror = null; // Prevents looping in case the placeholder also fails to load
@@ -216,13 +216,11 @@ export async function loadAndRenderProductDetails() {
     const container = document.getElementById('product-details-container');
     if (!container) return;
 
-    const pathParts = window.location.pathname.split('/').filter(part => part !== '');
-    const productId = pathParts[pathParts.length - 1];
-
     // Get ID from URL (e.g., product-details.html?id=5)
     const params = new URLSearchParams(window.location.search);
+    const productId = params.get('id');
 
-     if (!productId || productId === 'product-details') {
+     if (!productId) {
         container.innerHTML = '<p class="error">No product ID provided.</p>';
         return;
     }
@@ -239,31 +237,31 @@ const initialSrc = (product.imageUrl && product.imageUrl.trim() !== '')
                        : DEFAULT_IMAGE;
 
     // Render the details
-container.innerHTML = `
-    <div class="details-layout">
-        <div class="details-image">
-            <img id="main-product-img" 
-                 src="${initialSrc}" 
-                 alt="${escapeHtml(product.name)}" width="20%">
-        </div>
-        <div class="details-info">
-            <h1>${escapeHtml(product.name)}</h1>
-            <p class="article-num">Art nr: ${escapeHtml(product.articleNumber)}</p>
-            <p class="category">Category: ${escapeHtml(product.category)}</p>
-            <p class="price">${formatPrice(product.price)}</p>
-            
-            <div class="description">
-                <h3>Beskrivning</h3>
-                <p>${escapeHtml(product.description || 'Ingen beskrivning tillgänglig.')}</p>
+    container.innerHTML = `
+        <div class="details-layout">
+            <div class="details-image">
+                <img id="main-product-img" 
+                     src="${initialSrc}" 
+                     alt="${escapeHtml(product.name)}" width="20%">
             </div>
-
-            <div class="actions-row" style="display: flex; gap: 1rem; margin-top: 2rem;">
-                <div id="details-action-container"></div>
-                <a href="../products" class="back-btn">Tillbaka till produkter</a>
+            <div class="details-info">
+                <h1>${escapeHtml(product.name)}</h1>
+                <p class="article-num">Art nr: ${escapeHtml(product.articleNumber)}</p>
+                <p class="category">Category: ${escapeHtml(product.category)}</p>
+                <p class="price">${formatPrice(product.price)}</p>
+                
+                <div class="description">
+                    <h3>Beskrivning</h3>
+                    <p>${escapeHtml(product.description || 'Ingen beskrivning tillgänglig.')}</p>
+                </div>
+      
+                <div class="actions-row" style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <div id="details-action-container"></div>
+                    <a href="products" class="back-btn">Tillbaka till produkter</a>
+                </div>
             </div>
         </div>
-    </div>
-`;
+    `;
 
 // Handle broken links: If the URL exists but the image fails to load
     const imgElement = document.getElementById('main-product-img');
