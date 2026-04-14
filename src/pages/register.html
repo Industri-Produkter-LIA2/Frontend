@@ -3,16 +3,20 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Login</title>
+  <title>Register</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <template id="page-fragment">
-    <h1>Login</h1>
-    <form id="login-form">
-      <input id="email" type="email" placeholder="Email" required />
-      <input id="password" type="password" placeholder="Password" required />
-      <button type="submit">Login</button>
+    <h1>Register</h1>
+    <form id="register-form">
+      <input id="email" type="email" required />
+      <input id="username" required />
+      <input id="password" type="password" required />
+      <input id="confirm-password" type="password" placeholder="Confirm Password" required />
+      <input id="company" required />
+      <input id="org" required />
+      <button type="submit">Register</button>
     </form>
   </template>
 

@@ -12,4 +12,8 @@ export function initApp() {
   if (document.getElementById('product-details-container')) {
     loadAndRenderProductDetails();
   }
+
+  // Login/Register page logic
+  if (window.location.pathname === '/login') import ('./src/scripts/login.js');
+  if (window.location.pathname === '/register') import ('./src/scripts/register.js');
 }
