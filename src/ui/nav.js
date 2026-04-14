@@ -1,4 +1,4 @@
-import { getUser, logout } from './ui/auth.js';
+import { getUser, logout } from './auth.js';
 
 export function initNav() {
   const MENU_ITEMS = [

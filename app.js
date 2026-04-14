@@ -1,4 +1,4 @@
-import { initNav } from './src/nav.js';
+import { initNav } from './src/ui/nav.js';
 import { loadAndRenderProducts ,loadAndRenderProductDetails} from './src/api.js';
 
 export function initApp() {
