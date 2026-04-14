@@ -1,0 +1,21 @@
+# VS / Rider / IDE
+.vs/
+.vscode/
+.idea/
+
+# Node
+node_modules/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build outputs
+dist/
+build/
+
+# Env
+.env
