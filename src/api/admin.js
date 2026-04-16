@@ -11,3 +11,9 @@ export async function approveUser(id) {
 
     if (!res.ok) throw new Error('Failed to approve user');
 }
+
+export async function rejectUser(id) {
+    const res = await fetch(`${API_BASE}/reject/${id}`, { method: 'PATCH' });
+
+    if (!res.ok) throw new Error('Failed to reject user');
+}
