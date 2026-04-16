@@ -1,12 +1,6 @@
-import { getUser, logout } from './auth.js';
+import { getUser, logout, isAdmin } from './auth.js';
 
 export function initNav() {
-  const MENU_ITEMS = [
-    { title: 'Home', href: '/' },
-    { title: 'Products', href: '/products' },
-    { title: 'Register', href: '/register' } // This should be moved to a separate "auth" nav section if we implement user roles and conditional rendering, changing login/register visibility based on auth state.
-  ];
-
   const navList = document.getElementById('nav-list');
   const navEl = document.getElementById('page-nav');
   const toggle = document.getElementById('nav-toggle');
@@ -16,6 +10,23 @@ export function initNav() {
     console.warn('Nav elements not found');
     return;
   }
+
+  const user = getUser();
+
+  const MENU_ITEMS = [
+  { title: 'Home', href: '/' },
+  { title: 'Products', href: '/products' },
+  ];
+
+  if (!user) {
+    MENU_ITEMS.push({ title: 'Register', href: '/register' });
+  }
+
+  if (user && isAdmin()) {
+    MENU_ITEMS.push({ title: 'Admin Panel', href: '/admin' });
+  }
+
+  navList.innerHTML = '';
 
   MENU_ITEMS.forEach(item => {
     const li = document.createElement('li');

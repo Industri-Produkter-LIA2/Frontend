@@ -13,7 +13,8 @@ export function initApp() {
     loadAndRenderProductDetails();
   }
 
-  // Login/Register page logic
+  // Page specific script loading based on current url path.
   if (window.location.pathname === '/login') import ('./src/scripts/login.js');
   if (window.location.pathname === '/register') import ('./src/scripts/register.js');
+  if (window.location.pathname === '/admin') import ('./src/scripts/admin.js');
 }
