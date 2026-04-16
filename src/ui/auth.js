@@ -20,3 +20,14 @@ export function isAdmin() {
     const user = getUser();
     return user?.role === Roles.Admin;
 }
+
+export function requireAdmin() {
+    const user = getUser();
+    if (!user || !isAdmin()) {
+        alert('Access denied. Admins only.');
+        window.location.href = '/';
+        return false;
+    }
+
+    return true;
+}
