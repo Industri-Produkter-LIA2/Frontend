@@ -1,4 +1,4 @@
-import { register } from '../api/auth';
+import { register } from '../api/auth.js';
 
 document.getElementById('register-form').onsubmit = async (e) => {
     e.preventDefault();
