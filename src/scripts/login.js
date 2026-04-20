@@ -10,7 +10,6 @@ document.getElementById('login-form').onsubmit = async (e) => {
     try {
         const user = await login(email, password);
         saveUser(user);
-
         alert('Login successful!');
 
         window.location.href = '/';

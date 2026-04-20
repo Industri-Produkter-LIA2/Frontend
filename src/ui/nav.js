@@ -20,6 +20,14 @@ export function initNav() {
 
   if (!user) {
     MENU_ITEMS.push({ title: 'Register', href: '/register' });
+  }else {
+    // USER IS LOGGED IN - Add Profile link
+    // Adjust 'user.customerId' or 'user.id' to match exactly what your auth.js returns.
+    // We fall back to localStorage just in case you stored it there directly.
+    const customerId = user.id;
+    if (customerId) {
+        MENU_ITEMS.push({ title: 'Profile', href: `/profile/${customerId}` });
+    }
   }
 
   if (user && isAdmin()) {

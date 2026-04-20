@@ -331,3 +331,56 @@ async function handleAddToCart(productId, button) {
         button.disabled = false;
     }
 }
+
+// ==================== CUSTOMER FUNCTIONS ====================
+export async function fetchCustomerProfile(customerId) {
+    // Replace with your actual endpoint, e.g., using a token or session
+    const url = `${API_BASE}/api/customer/${customerId}`; 
+    try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return await res.json();
+    } catch (error) {
+        console.error("API Error fetching customer:", error);
+        return null;
+    }
+}
+
+export async function updateCustomerProfile(customerId, customerData) {
+    const url = `${API_BASE}/api/customer/${customerId}`;
+    try {
+        const res = await fetch(url, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(customerData)
+        });
+        
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        // showMessage is already in your api.js
+        return true; 
+    } catch (error) {
+        console.error("API Error updating customer:", error);
+        return false;
+    }
+}
+
+// ==================== PASSWORD FUNCTION ====================
+export async function updateUserPassword(userId, newPassword) {
+    // 1. CHANGED 'accounts' to 'auth' to match AuthController
+    const url = `${API_BASE}/api/auth/change-password?id=${userId}`; 
+    
+    try {
+        const res = await fetch(url, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            // 2. CHANGED back to an object to match your ChangePasswordDto
+            body: JSON.stringify({ newPassword: newPassword }) 
+        });
+        
+        if (!res.ok) throw new Error('Failed to update password');
+        return true; 
+    } catch (error) {
+        console.error("API Error updating password:", error);
+        return false;
+    }
+}
