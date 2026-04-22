@@ -1,11 +1,6 @@
+import { getUser, logout, isAdmin } from './auth.js';
+
 export function initNav() {
-  const MENU_ITEMS = [
-    { title: 'Home', href: '/' },
-    { title: 'Products', href: '/products' },
-  ];
-
-  const LOGIN_URL = '/login';
-
   const navList = document.getElementById('nav-list');
   const navEl = document.getElementById('page-nav');
   const toggle = document.getElementById('nav-toggle');
@@ -15,6 +10,23 @@ export function initNav() {
     console.warn('Nav elements not found');
     return;
   }
+
+  const user = getUser();
+
+  const MENU_ITEMS = [
+  { title: 'Home', href: '/' },
+  { title: 'Products', href: '/products' },
+  ];
+
+  if (!user) {
+    MENU_ITEMS.push({ title: 'Register', href: '/register' });
+  }
+
+  if (user && isAdmin()) {
+    MENU_ITEMS.push({ title: 'Admin Panel', href: '/admin' });
+  }
+
+  navList.innerHTML = '';
 
   MENU_ITEMS.forEach(item => {
     const li = document.createElement('li');
@@ -26,9 +38,7 @@ export function initNav() {
     navList.appendChild(li);
   });
 
-  loginBtn.addEventListener('click', () => {
-    window.location.href = LOGIN_URL;
-  });
+  UpdateAuthUI(loginBtn);
 
   function closeNav() {
     navEl.hidden = true;
@@ -53,4 +63,24 @@ export function initNav() {
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeNav();
   });
+}
+
+function UpdateAuthUI(loginBtn) {
+  
+  const LOGIN_URL = '/login';
+
+  const user = getUser();
+
+  if (user) {
+    loginBtn.textContent = 'Logout';
+    loginBtn.onclick = () => {
+      logout();
+      window.location.href = LOGIN_URL;
+    };
+  } else {
+    loginBtn.textContent = 'Login';
+    loginBtn.onclick = () => {
+      window.location.href = LOGIN_URL;
+    };
+  }
 }
