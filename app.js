@@ -1,5 +1,5 @@
-import { initNav } from './src/nav.js';
-import { loadAndRenderProducts } from './src/api.js';
+import { initNav } from './src/ui/nav.js';
+import { loadAndRenderProducts ,loadAndRenderProductDetails} from './src/api.js';
 
 export function initApp() {
   initNav();
@@ -8,4 +8,13 @@ export function initApp() {
   if (document.getElementById('products')) {
     loadAndRenderProducts();
   }
+  // Logic for Product Details page
+  if (document.getElementById('product-details-container')) {
+    loadAndRenderProductDetails();
+  }
+
+  // Page specific script loading based on current url path.
+  if (window.location.pathname === '/login') import ('./src/scripts/login.js');
+  if (window.location.pathname === '/register') import ('./src/scripts/register.js');
+  if (window.location.pathname === '/admin') import ('./src/scripts/admin.js');
 }
