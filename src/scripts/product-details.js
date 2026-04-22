@@ -1,6 +1,7 @@
 import { deleteProduct, updateProduct } from '../api/products.js';
 import { isAdmin } from '../ui/auth.js';
 import { getCategories } from '../constants/categories.js';
+import { loadAndRenderProductDetails} from '../api.js';
 
 const form = document.getElementById('update-product-form');
 const updateBtn = document.getElementById('update-product');
@@ -46,12 +47,6 @@ async function loadProductDetails() {
     document.getElementById('description').value = product.description;
     document.getElementById('imageUrl').value = product.imageUrl;
     document.getElementById('category').value = product.category;
-    
-    document.getElementById('product-details-container').innerHTML = `
-    <h2>${product.name}</h2>
-    <p>${product.description}</p>
-    <p><strong>${product.price} kr</strong></p>
-  `;
 }
 
 updateBtn.onclick = async () => {
@@ -106,7 +101,7 @@ submitBtn.onclick = async (e) => {
     form.hidden = true;
     updateBtn.textContent = 'Update Product';
     
-    await loadProductDetails();
+    await loadAndRenderProductDetails();
 };
 
 document.getElementById('delete-product').onclick = async () => {
@@ -129,4 +124,4 @@ if (!isAdmin()) {
     document.getElementById('delete-product')?.remove();
 }
 
-loadProductDetails();
+loadAndRenderProductDetails();
