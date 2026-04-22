@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Register</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <template id="page-fragment">
+    <h1>Register</h1>
+    <form id="register-form">
+      <input id="email" type="email" placeholder="Email" required />
+      <input id="username" placeholder="Username" required />
+      <input id="password" type="password" placeholder="Password" required />
+      <input id="confirm-password" type="password" placeholder="Confirm Password" required />
+      <input id="company" placeholder="CompanyName" required />
+      <input id="org" placeholder="OrgNumber" required />
+      <button type="submit">Register</button>
+    </form>
+  </template>
+
+  <!-- Moved template loading to separate file; templateLoader.js -->
+  <script type="module">
+    import { loadTemplate } from '/src/templateLoader.js';
+    import { initApp } from '/app.js';
+
+    await loadTemplate();
+    initApp();
+  </script>
+</body>
+</html>
