@@ -21,4 +21,5 @@ export function initApp() {
   if (window.location.pathname === '/login') import ('./src/scripts/login.js');
   if (window.location.pathname === '/register') import ('./src/scripts/register.js');
   if (window.location.pathname === '/admin') import ('./src/scripts/admin.js');
+  if (window.location.pathname === '/orders') import ('./src/scripts/orders.js');
 }

@@ -14,8 +14,9 @@ export function initNav() {
   const user = getUser();
 
   const MENU_ITEMS = [
-  { title: 'Home', href: '/' },
-  { title: 'Products', href: '/products' },
+    { title: 'Home', href: '/' },
+    { title: 'Products', href: '/products' },
+    { title: 'My Orders', href: '/orders' },
   ];
 
   if (!user) {
@@ -27,7 +28,6 @@ export function initNav() {
   }
 
   navList.innerHTML = '';
-
   MENU_ITEMS.forEach(item => {
     const li = document.createElement('li');
     const a = document.createElement('a');
