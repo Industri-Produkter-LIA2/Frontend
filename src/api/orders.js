@@ -1,25 +1,13 @@
+import { API_BASE } from '../api.js';
+
 export async function fetchOrdersByCustomerId(customerId) {
-  const candidates = [
-    `/api/order/customer/${customerId}`,
-    `http://localhost:5088/api/order/customer/${customerId}`
-  ];
+  const url = `${API_BASE}/api/order/customer/${customerId}`;
+  const res = await fetch(url);
+  const data = await res.json();
 
-  let lastError = null;
-
-  for (const url of candidates) {
-    try {
-      const res = await fetch(url);
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data?.message || `HTTP ${res.status}`);
-      }
-
-      return data;
-    } catch (err) {
-      lastError = err;
-    }
+  if (!res.ok) {
+    throw new Error(data?.message || `HTTP ${res.status}`);
   }
 
-  throw lastError || new Error('Unable to load orders');
+  return data;
 }

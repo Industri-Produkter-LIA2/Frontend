@@ -89,3 +89,5 @@ export async function initOrdersPage() {
     statusEl.textContent = `Could not load orders: ${err.message}`;
   }
 }
+
+initOrdersPage();
