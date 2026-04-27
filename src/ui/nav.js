@@ -74,18 +74,42 @@ export function initNav() {
 }
 
 function UpdateAuthUI(loginBtn) {
-  
   const LOGIN_URL = '/login';
-
   const user = getUser();
+  
+  // Find the container holding the top buttons
+  const headerActions = document.querySelector('.header-actions');
+
+  // Clean up any existing avatar first (so we don't get duplicates on refresh)
+  const existingAvatar = document.getElementById('header-avatar');
+  if (existingAvatar) existingAvatar.remove();
 
   if (user) {
+    const loggedInId = user.id || user.Id || user.customerId || user.accountId;
+    
+    // Create the Avatar Link
+    const avatar = document.createElement('a');
+    avatar.id = 'header-avatar';
+    avatar.href = `/profile/${loggedInId}`;
+    avatar.className = 'profile-avatar';
+    
+    // Get first letter
+    const initial = (user.username || user.email || 'U').charAt(0).toUpperCase();
+    avatar.textContent = initial;
+
+    // Put it in the header
+    if (headerActions) {
+        headerActions.insertBefore(avatar, loginBtn);
+    }
+
+    // 5. Set up the Logout button
     loginBtn.textContent = 'Logout';
     loginBtn.onclick = () => {
       logout();
       window.location.href = LOGIN_URL;
     };
   } else {
+    // User is NOT logged in
     loginBtn.textContent = 'Login';
     loginBtn.onclick = () => {
       window.location.href = LOGIN_URL;

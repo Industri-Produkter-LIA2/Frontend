@@ -54,20 +54,44 @@ h1 { color: #333; margin: 0; text-align: center; }
   margin: 1rem auto 0;
 }
 
-.header-wrapper {
-  position: relative;
+.site-header {
+    display: flex;
+    flex-direction: row;         /* Force left-to-right layout */
+    justify-content: space-between; /* Brand on left, actions on right */
+    align-items: center;
+    width: 100%;
+    padding: 1rem 2rem;
+    box-sizing: border-box;
+    position: relative;
+    border-bottom: 1px solid #ddd; /* Optional: adds a nice line under the header */
 }
 
-.site-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.site-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none;
+    color: #333;
+    flex-shrink: 0;              /* NEVER allow the logo to squish */
+    margin-right: auto;          /* Push everything else to the right */
 }
-.site-brand { font-weight: 600; }
-.header-actions { display:flex; gap:0.5rem; align-items:center; }
+
+.header-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: left;
+    flex-shrink: 0;              /* NEVER allow the buttons area to squish */
+}
+
+
+.header-actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;                   /* Perfect spacing between buttons */
+}
 
 main#app { padding: 1rem; margin-top: 0.5rem; }
-}
+
 /* Cart Modal Styles */
 .cart-modal {
     display: none;
@@ -501,4 +525,27 @@ main#app { padding: 1rem; margin-top: 0.5rem; }
 /* Ensure the action row looks good on mobile */
 .actions-row {
     flex-wrap: wrap;
+}
+/* Circular Avatar Button */
+.profile-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: #2196F3; 
+    color: white;
+    border-radius: 50%;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.2rem;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    margin-right: 0; /* <--- REMOVE the 15px margin we added previously */
+}
+
+.profile-avatar:hover {
+    background-color: #1976D2; /* Darker blue on hover */
+    border: 2px solid #fff;
 }
