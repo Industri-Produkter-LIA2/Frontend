@@ -1,4 +1,4 @@
-const API_BASE = 'https://localhost:7040/api/auth';
+const API_BASE = '/api/auth';
 
 export async function fetchPendingUsers() {
     const res = await fetch(`${API_BASE}/pending`);

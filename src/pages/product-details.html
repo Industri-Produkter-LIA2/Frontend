@@ -11,6 +11,19 @@
     <div id="product-details-container" class="product-details">
         <p>Loading product details...</p>
     </div>
+    <button id="update-product">Update Product</button>
+    <button id="delete-product">Delete Product</button>
+    
+    <form id="update-product-form" hidden>
+      <input id="name" placeholder="Name" />
+      <input id="articleNumber" placeholder="Article Number" />
+      <input id="price" type="number" step="0.01" />
+      <input id="description" placeholder="Description" />
+      <input id="imageUrl" placeholder="Image URL" />
+
+      <select id="category"></select>
+      <button id="submit-update">Submit Update</button>
+    </form>
   </template>
 
   <script type="module">

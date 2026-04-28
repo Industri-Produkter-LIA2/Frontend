@@ -1,5 +1,5 @@
 // ==================== CONFIGURATION ====================
-const API_BASE = "https://localhost:7040";
+export const API_BASE = "https://localhost:7040";
 
 export function formatPrice(value) {
     const num = Number(value);
