@@ -1,4 +1,5 @@
 import { getUser, logout, isAdmin } from './auth.js';
+import { Roles } from '../constants/roles.js';
 
 export function initNav() {
   const navList = document.getElementById('nav-list');
@@ -12,12 +13,17 @@ export function initNav() {
   }
 
   const user = getUser();
+  const customerId = user?.customerId ?? user?.CustomerId ?? null;
+  const isCustomer = user?.role === Roles.Customer;
 
   const MENU_ITEMS = [
     { title: 'Home', href: '/' },
     { title: 'Products', href: '/products' },
-    { title: 'My Orders', href: '/orders' },
   ];
+
+  if (user && isCustomer && customerId) {
+    MENU_ITEMS.push({ title: 'My Orders', href: `/orders?customerId=${customerId}` });
+  }
 
   if (!user) {
     MENU_ITEMS.push({ title: 'Register', href: '/register' });
