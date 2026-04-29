@@ -13,6 +13,17 @@
       <label for="product-search">Sök:</label>
       <input id="product-search" type="search" placeholder="Sök efter produkt, kategori eller artikel" />
     </div>
+    <button id="add-product-btn">Add Product</button>
+    <form id="add-product-form" hidden>
+      <input id="name" placeholder="Name" />
+      <input id="articleNumber" placeholder="Article Number" />
+      <input id="price" placeholder="0.00" type="number" step="0.01" />
+      <input id="description" placeholder="Description" />
+      <input id="imageUrl" placeholder="Image URL" />
+
+      <select id="category"></select>
+      <button id="submit-product">Submit</button>
+    </form>
     <div id="products"></div>
   </template>
 
