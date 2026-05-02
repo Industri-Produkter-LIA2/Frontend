@@ -92,6 +92,13 @@ export async function initProfile() {
         const newPass = document.getElementById('new-password').value;
         const confirmPass = document.getElementById('confirm-password').value;
 
+        // Validation: Is the password null or empty?
+        // Using .trim() ensures the user didn't just type a bunch of spaces
+        if (!newPass || newPass.trim() === '') {
+            alert("Password cannot be empty!");
+            return;
+        }
+
         // Validation: Do the passwords match?
         if (newPass !== confirmPass) {
             alert("Passwords do not match!");

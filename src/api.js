@@ -1,4 +1,7 @@
+import {getUser} from './ui/auth.js'
+
 // ==================== CONFIGURATION ====================
+
 const API_BASE = "https://localhost:7040";
 
 export function formatPrice(value) {
@@ -285,12 +288,14 @@ async function handleAddToCart(productId, button) {
     try {
         button.disabled = true;
         button.textContent = 'Adding...';
-        
+
         let cartId = localStorage.getItem('cartId');
         
+        var user = getUser();
+
         // Create cart if doesn't exist
         if (!cartId) {
-            const cartResponse = await fetch(`${API_BASE}api/cart`, {
+            const cartResponse = await fetch(`${API_BASE}/api/cart/${user.customerId}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             });
@@ -303,7 +308,7 @@ async function handleAddToCart(productId, button) {
         }
         
         // Add item to cart
-        const response = await fetch(`${API_BASE}api/cart/${cartId}/items`, {
+        const response = await fetch(`${API_BASE}/api/cart/${cartId}/items`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ productId, quantity: 1 })
@@ -381,6 +386,83 @@ export async function updateUserPassword(userId, newPassword) {
         return true; 
     } catch (error) {
         console.error("API Error updating password:", error);
+        return false;
+    }
+}
+// ==================== CART VIEW & UPDATE FUNCTIONS ====================
+
+export async function fetchCart(userId) {
+    if (!userId) return null; 
+
+    try {
+        // Adjust this URL to match your C# endpoint (e.g., /api/cart?userId=5 or /api/users/5/cart)
+        const url = `${API_BASE}/api/cart/user/${userId}`; 
+        
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('Failed to fetch user cart');
+        var result = await res.json();
+        console.log('res:' , result);
+        return result;
+    } catch (error) {
+        console.error("API Error fetching cart:", error);
+        return null;
+    }
+}
+
+export async function updateCartItemQuantity(productId, newQuantity) {
+    const cartId = localStorage.getItem('cartId');
+    if (!cartId) return false;
+
+    try {
+        // 1. FIXED: Added /${productId} to the end of the URL to match C#
+        const url = `${API_BASE}/api/cart/${cartId}/items/${productId}`; 
+        
+        const res = await fetch(url, {
+            method: 'PATCH', 
+            headers: { 'Content-Type': 'application/json' },
+            // 2. FIXED: C# only needs the new quantity in the body
+            body: JSON.stringify({ quantity: newQuantity }) 
+        });
+        
+        if (!res.ok) throw new Error('Failed to update quantity');
+        return true;
+    } catch (error) {
+        console.error("API Error updating cart:", error);
+        return false;
+    }
+}
+// ==================== DELETE FROM CART ====================
+
+// 1. Remove a single item
+export async function removeCartItem(productId) {
+    const cartId = localStorage.getItem('cartId');
+    if (!cartId) return false;
+
+    try {
+        const url = `${API_BASE}/api/cart/${cartId}/items/${productId}`;
+        const res = await fetch(url, { method: 'DELETE' });
+        
+        if (!res.ok) throw new Error('Failed to delete item');
+        return true;
+    } catch (error) {
+        console.error("API Error deleting item:", error);
+        return false;
+    }
+}
+
+// 2. Clear the entire cart
+export async function clearEntireCart() {
+    const cartId = localStorage.getItem('cartId');
+    if (!cartId) return false;
+
+    try {
+        const url = `${API_BASE}/api/cart/${cartId}`;
+        const res = await fetch(url, { method: 'DELETE' });
+        
+        if (!res.ok) throw new Error('Failed to clear cart');
+        return true;
+    } catch (error) {
+        console.error("API Error clearing cart:", error);
         return false;
     }
 }
