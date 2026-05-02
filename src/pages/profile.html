@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+    <body>
+<div id="page-fragment" data-title="Company Profile">
+    <div class="profile-container" style="max-width: 600px; margin: 2rem auto; padding: 2rem; border: 1px solid #ddd; border-radius: 8px;">
+        <h2>Company Profile</h2>
+        
+        <div id="profile-view">
+            <div style="margin-bottom: 1.5rem;">
+                <p><strong>Company Name:</strong> <span id="view-company-name">Loading...</span></p>
+                <p><strong>Org Number:</strong> <span id="view-org-number">Loading...</span></p>
+                <p><strong>Address:</strong> <span id="view-address">Loading...</span></p>
+                <p><strong>Invoice Address:</strong> <span id="view-invoice-address">Loading...</span></p>
+            </div>
+            <div style="display: flex; gap: 1rem;">
+                <button id="btn-edit-profile" style="padding: 0.5rem 1rem; background: #2196F3; color: white; border: none; border-radius: 4px; cursor: pointer;">Edit Profile</button>
+                <button id="btn-show-password-form" style="padding: 0.5rem 1rem; background: #FF9800; color: white; border: none; border-radius: 4px; cursor: pointer;">Change Password</button>
+            </div>
+        </div>
+
+        <form id="profile-edit-form" style="display: none; flex-direction: column; gap: 1rem;">
+            <div>
+                <label for="edit-company-name" style="display: block; font-weight: bold; margin-bottom: 0.25rem;">Company Name</label>
+                <input type="text" id="edit-company-name" required style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+            </div>
+            
+            <div>
+                <label for="edit-org-number" style="display: block; font-weight: bold; margin-bottom: 0.25rem;">Organization Number</label>
+                <input type="text" id="edit-org-number" required style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+            </div>
+
+            <div>
+                <label for="edit-address" style="display: block; font-weight: bold; margin-bottom: 0.25rem;">Address</label>
+                <input type="text" id="edit-address" required style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+            </div>
+
+            <div>
+                <label for="edit-invoice-address" style="display: block; font-weight: bold; margin-bottom: 0.25rem;">Invoice Address</label>
+                <input type="text" id="edit-invoice-address" required style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+            </div>
+
+            <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                <button type="submit" style="padding: 0.5rem 1rem; background: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;">Save Changes</button>
+                <button type="button" id="btn-cancel-edit" style="padding: 0.5rem 1rem; background: #f44336; color: white; border: none; border-radius: 4px; cursor: pointer;">Cancel</button>
+            </div>
+        </form>
+
+        <form id="password-edit-form" style="display: none; flex-direction: column; gap: 1rem; margin-top: 1rem;">
+            <h3>Change Password</h3>
+            <div>
+                <label for="new-password" style="display: block; font-weight: bold; margin-bottom: 0.25rem;">New Password</label>
+                <input type="password" id="new-password" required minlength="6" style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+            </div>
+            
+            <div>
+                <label for="confirm-password" style="display: block; font-weight: bold; margin-bottom: 0.25rem;">Confirm New Password</label>
+                <input type="password" id="confirm-password" required minlength="6" style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+            </div>
+
+            <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                <button type="submit" style="padding: 0.5rem 1rem; background: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;">Update Password</button>
+                <button type="button" id="btn-cancel-password" style="padding: 0.5rem 1rem; background: #f44336; color: white; border: none; border-radius: 4px; cursor: pointer;">Cancel</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+ <script type="module">
+    import { loadTemplate } from '/src/templateLoader.js';
+    import { initApp } from '/app.js';
+
+    await loadTemplate();
+    initApp();
+  </script>
+
+</body>
+</html>
