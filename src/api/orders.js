@@ -1,7 +1,9 @@
-import { API_BASE } from '../api.js';
+import { API_BASE_URL } from '../constants/apiConfig.js';
+
+const API_BASE = API_BASE_URL;
 
 export async function fetchOrdersByCustomerId(customerId) {
-  const url = `${API_BASE}/api/order/customer/${customerId}`;
+  const url = `${API_BASE}/order/customer/${customerId}`;
   const res = await fetch(url);
   const data = await res.json();
 

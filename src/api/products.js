@@ -1,4 +1,6 @@
-const API_BASE = '/api/products';
+import { API_BASE_URL } from '../constants/apiConfig.js';
+
+const API_BASE = `${API_BASE_URL}/products`;
 
 export async function createProduct(data) {
     const res = await fetch(API_BASE, {
@@ -10,7 +12,7 @@ export async function createProduct(data) {
     });
     
     if (!res.ok) throw new Error('Failed to create product');
-        return res.json();
+    return res.json();
 }
 
 export async function updateProduct(id, data) {
