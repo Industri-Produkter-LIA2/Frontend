@@ -1,4 +1,6 @@
-const API_BASE = '/api/auth';
+import { API_BASE_URL } from '../constants/apiConfig.js';
+
+const API_BASE = `${API_BASE_URL}/Auth`;
 
 export async function login(email, password) {
     const res = await fetch(`${API_BASE}/login`, {
