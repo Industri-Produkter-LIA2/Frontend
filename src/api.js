@@ -295,7 +295,7 @@ async function handleAddToCart(productId, button) {
 
         // Create cart if doesn't exist
         if (!cartId) {
-            const cartResponse = await fetch(`${API_BASE}/api/cart/${user.customerId}`, {
+            const cartResponse = await fetch(`${API_BASE}/api/cart?customerId=${user.customerId}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             });
