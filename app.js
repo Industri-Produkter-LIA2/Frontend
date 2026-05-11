@@ -21,5 +21,9 @@ export function initApp() {
   if (window.location.pathname === '/login') import ('./src/scripts/login.js');
   if (window.location.pathname === '/register') import ('./src/scripts/register.js');
   if (window.location.pathname === '/admin') import ('./src/scripts/admin.js');
+ // Use startsWith so it catches both '/profile' and '/profile/1'
+  if (window.location.pathname.startsWith('/profile')) {
+      import('/src/scripts/profile.js').then(module => module.initProfile());
+  }
   if (window.location.pathname === '/orders') import ('./src/scripts/orders.js');
 }
