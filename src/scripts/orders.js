@@ -13,7 +13,6 @@ function getCustomerId() {
     return null;
   }
 
-  // Supports current and potential future login payloads.
   const candidate = user.customerId ?? user.CustomerId ?? null;
   if (candidate == null) {
     return null;
@@ -43,6 +42,7 @@ function renderOrders(orders) {
     const article = document.createElement('article');
     article.className = 'order-card';
 
+    const oid = order.id ?? order.Id;
     const created = order.createdAtUtc
       ? new Date(order.createdAtUtc).toLocaleString()
       : 'Unknown date';
@@ -57,7 +57,7 @@ function renderOrders(orders) {
       .join('');
 
     article.innerHTML = `
-      <h2>${order.orderNumber || `Order #${order.id}`}</h2>
+      <h2>${order.orderNumber || `Order #${oid}`}</h2>
       <p><strong>Status:</strong> ${order.status || 'Unknown'}</p>
       <p><strong>Created:</strong> ${created}</p>
       <p><strong>Total:</strong> ${formatPrice(order.totalAmount)}</p>

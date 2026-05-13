@@ -24,7 +24,7 @@ export function initNav() {
   ];
 
   if (user && isCustomer && customerId) {
-    MENU_ITEMS.push({ title: 'My Orders', href: `/orders?customerId=${customerId}` });
+    MENU_ITEMS.push({ title: 'My Orders', href: '/orders' });
   }
 
   if (!user) {
