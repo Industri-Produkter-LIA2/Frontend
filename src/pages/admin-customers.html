@@ -46,11 +46,11 @@
           };
           const rows = data.map((c) => {
             const id = c.id ?? c.Id;
-            const name = c.name ?? c.Name ?? '';
-            const company = c.company ?? c.Company ?? '';
+            const username = c.username ?? c.Username ?? '';
+            const companyName = c.companyName ?? c.CompanyName ?? '';
             const email = c.email ?? c.Email ?? '';
             const org = c.orgNumber ?? c.OrgNumber ?? '';
-            return `<tr><td>${id}</td><td>${esc(name)}</td><td>${esc(company)}</td><td>${esc(email)}</td><td>${esc(org)}</td><td><a href="/orders?customerId=${id}">Orders</a></td></tr>`;
+            return `<tr><td>${id}</td><td>${esc(username)}</td><td>${esc(companyName)}</td><td>${esc(email)}</td><td>${esc(org)}</td><td><a href="/orders?customerId=${id}">Orders</a></td></tr>`;
           }).join('');
           tableEl.innerHTML = `<table class="admin-table"><thead><tr><th>ID</th><th>Name</th><th>Company</th><th>Email</th><th>Org. no.</th><th></th></tr></thead><tbody>${rows}</tbody></table>`;
         }
