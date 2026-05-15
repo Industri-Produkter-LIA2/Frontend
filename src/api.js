@@ -1,4 +1,4 @@
-import {getUser} from './ui/auth.js'
+import { getUser, isAdmin } from './ui/auth.js'
 
 // ==================== CONFIGURATION ====================
 
@@ -177,6 +177,14 @@ function createProductCard(product, productId) {
 }
 
 function createAddToCartButton(productId) {
+
+    if (isAdmin()) {
+        const hiddenContainer = document.createElement('div');
+        hiddenContainer.className = 'add-to-cart-container';
+        hiddenContainer.style.display = 'none';
+        return hiddenContainer;
+    }
+
     const container = document.createElement('div');
     container.className = 'add-to-cart-container';
     container.style.marginTop = '1rem';
