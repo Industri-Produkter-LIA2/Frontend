@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Customers</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <template id="page-fragment" data-title="Customers">
+    <p><a href="/admin">← Admin panel</a></p>
+    <h1>Customers</h1>
+    <p id="admin-customers-status"></p>
+    <div id="admin-customers-table"></div>
+  </template>
+
+  <script type="module">
+    import { loadTemplate } from '/src/templateLoader.js';
+    import { initApp } from '/app.js';
+    import { requireAdmin } from '/src/ui/auth.js';
+    import { API_BASE_URL } from '/src/constants/apiConfig.js';
+
+    await loadTemplate();
+    initApp();
+
+    const statusEl = document.getElementById('admin-customers-status');
+    const tableEl = document.getElementById('admin-customers-table');
+    if (!statusEl || !tableEl) throw new Error('Missing layout');
+
+    if (requireAdmin()) {
+      statusEl.textContent = 'Loading…';
+      try {
+        const res = await fetch(`${API_BASE_URL}/customer/list`);
+        const data = await res.json();
+        if (!res.ok) throw new Error(data?.message || `HTTP ${res.status}`);
+        if (!Array.isArray(data)) throw new Error('Invalid response');
+
+        statusEl.textContent = '';
+        if (data.length === 0) {
+          tableEl.innerHTML = '<p>No customers.</p>';
+        } else {
+          const esc = (s) => {
+            const d = document.createElement('div');
+            d.textContent = s == null ? '' : String(s);
+            return d.innerHTML;
+          };
+          const rows = data.map((c) => {
+            const id = c.id ?? c.Id;
+            const name = c.name ?? c.Name ?? '';
+            const company = c.company ?? c.Company ?? '';
+            const email = c.email ?? c.Email ?? '';
+            const org = c.orgNumber ?? c.OrgNumber ?? '';
+            return `<tr><td>${id}</td><td>${esc(name)}</td><td>${esc(company)}</td><td>${esc(email)}</td><td>${esc(org)}</td><td><a href="/orders?customerId=${id}">Orders</a></td></tr>`;
+          }).join('');
+          tableEl.innerHTML = `<table class="admin-table"><thead><tr><th>ID</th><th>Name</th><th>Company</th><th>Email</th><th>Org. no.</th><th></th></tr></thead><tbody>${rows}</tbody></table>`;
+        }
+      } catch (e) {
+        if (e.message) statusEl.textContent = 'Error: ' + e.message;
+      }
+    }
+  </script>
+</body>
+</html>
