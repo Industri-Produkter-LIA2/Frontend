@@ -49,7 +49,7 @@ export async function initProfile() {
         
         const updatedData = {
             id: customerId,
-            name: document.getElementById('edit-company-name').value,
+            companyName: document.getElementById('edit-company-name').value,
             orgNumber: document.getElementById('edit-org-number').value,
             address: document.getElementById('edit-address').value,
             invoiceAddress: document.getElementById('edit-invoice-address').value
